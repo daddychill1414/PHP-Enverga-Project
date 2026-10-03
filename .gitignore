@@ -1,0 +1,27 @@
+# Dependencies
+**/node_modules
+**/vendor
+
+# Environment & Secret files
+**/.env
+**/.env.backup
+**/.env.production
+**/auth.json
+**/storage/*.key
+
+# Laravel build & cache outputs
+**/public/build
+**/public/hot
+**/public/storage
+**/storage/framework/cache/data/*
+**/storage/framework/sessions/*
+**/storage/framework/views/*
+**/storage/logs/*.log
+**/database/*.sqlite
+
+# OS & IDE files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
