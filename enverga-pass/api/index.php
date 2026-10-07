@@ -16,35 +16,39 @@ foreach ($dirs as $dir) {
     }
 }
 
-// 2. Override environment variables for serverless compatibility
-$_ENV['VIEW_COMPILED_PATH'] = '/tmp/storage/framework/views';
-$_ENV['APP_STORAGE'] = '/tmp/storage';
-$_ENV['LOG_CHANNEL'] = 'stderr'; // Write logs directly to Vercel console, avoiding read-only file write
-$_ENV['SESSION_DRIVER'] = 'cookie'; // Avoid database/file session table requirement on serverless
-$_ENV['CACHE_STORE'] = 'array';
-
-putenv('VIEW_COMPILED_PATH=/tmp/storage/framework/views');
-putenv('APP_STORAGE=/tmp/storage');
-putenv('LOG_CHANNEL=stderr');
-putenv('SESSION_DRIVER=cookie');
-putenv('CACHE_STORE=array');
-
-// 3. Setup SQLite database in /tmp
+// 2. Setup SQLite database in /tmp
 $sqliteSource = __DIR__ . '/../database/database.sqlite';
 $sqliteTarget = '/tmp/database.sqlite';
 
-if (!file_exists($sqliteTarget)) {
-    if (file_exists($sqliteSource)) {
+if (!file_exists($sqliteTarget) || filesize($sqliteTarget) === 0) {
+    if (file_exists($sqliteSource) && filesize($sqliteSource) > 0) {
         @copy($sqliteSource, $sqliteTarget);
     } else {
         @touch($sqliteTarget);
     }
 }
 
-$_ENV['DB_CONNECTION'] = 'sqlite';
-$_ENV['DB_DATABASE'] = $sqliteTarget;
-putenv('DB_CONNECTION=sqlite');
-putenv('DB_DATABASE=' . $sqliteTarget);
+// 3. Set environment overrides for serverless runtime
+$envVars = [
+    'APP_STORAGE' => '/tmp/storage',
+    'VIEW_COMPILED_PATH' => '/tmp/storage/framework/views',
+    'LOG_CHANNEL' => 'stderr',
+    'SESSION_DRIVER' => 'cookie',
+    'CACHE_STORE' => 'array',
+    'DB_CONNECTION' => 'sqlite',
+    'DB_DATABASE' => $sqliteTarget,
+];
 
-// 4. Forward request to Laravel public/index.php
+foreach ($envVars as $key => $val) {
+    putenv("{$key}={$val}");
+    $_ENV[$key] = $val;
+    $_SERVER[$key] = $val;
+}
+
+// 4. Custom error catcher so we see exact error instead of generic 500
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
+
+// 5. Forward request to Laravel public/index.php
 require __DIR__ . '/../public/index.php';
