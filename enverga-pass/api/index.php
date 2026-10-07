@@ -37,6 +37,7 @@ $envVars = [
     'CACHE_STORE' => 'array',
     'DB_CONNECTION' => 'sqlite',
     'DB_DATABASE' => $sqliteTarget,
+    'VERCEL' => '1',
 ];
 
 foreach ($envVars as $key => $val) {
@@ -45,10 +46,17 @@ foreach ($envVars as $key => $val) {
     $_SERVER[$key] = $val;
 }
 
-// 4. Custom error catcher so we see exact error instead of generic 500
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(E_ALL);
-
-// 5. Forward request to Laravel public/index.php
-require __DIR__ . '/../public/index.php';
+// 4. Handle request with explicit exception display if anything fails
+try {
+    require __DIR__ . '/../vendor/autoload.php';
+    /** @var \Illuminate\Foundation\Application $app */
+    $app = require __DIR__ . '/../bootstrap/app.php';
+    $app->useStoragePath('/tmp/storage');
+    $app->handleRequest(\Illuminate\Http\Request::capture());
+} catch (\Throwable $e) {
+    http_response_code(500);
+    echo "<h1>EnvergaPass Serverless Exception</h1>";
+    echo "<p><strong>Message:</strong> " . htmlspecialchars($e->getMessage()) . "</p>";
+    echo "<p><strong>File:</strong> " . htmlspecialchars($e->getFile()) . " (Line " . $e->getLine() . ")</p>";
+    echo "<pre style='background:#f4f4f4;padding:15px;border-radius:5px;overflow:auto;font-size:12px;'>" . htmlspecialchars($e->getTraceAsString()) . "</pre>";
+}
