@@ -12,31 +12,37 @@ $dirs = [
 
 foreach ($dirs as $dir) {
     if (!is_dir($dir)) {
-        mkdir($dir, 0755, true);
+        @mkdir($dir, 0777, true);
     }
 }
 
-// 2. Set environment overrides for serverless
+// 2. Override environment variables for serverless compatibility
+$_ENV['VIEW_COMPILED_PATH'] = '/tmp/storage/framework/views';
+$_ENV['APP_STORAGE'] = '/tmp/storage';
+$_ENV['LOG_CHANNEL'] = 'stderr'; // Write logs directly to Vercel console, avoiding read-only file write
+$_ENV['SESSION_DRIVER'] = 'cookie'; // Avoid database/file session table requirement on serverless
+$_ENV['CACHE_STORE'] = 'array';
+
 putenv('VIEW_COMPILED_PATH=/tmp/storage/framework/views');
 putenv('APP_STORAGE=/tmp/storage');
-putenv('APP_SERVICES_CACHE=/tmp/bootstrap/cache/services.php');
-putenv('APP_PACKAGES_CACHE=/tmp/bootstrap/cache/packages.php');
-putenv('APP_CONFIG_CACHE=/tmp/bootstrap/cache/config.php');
-putenv('APP_ROUTES_CACHE=/tmp/bootstrap/cache/routes.php');
-putenv('APP_EVENTS_CACHE=/tmp/bootstrap/cache/events.php');
+putenv('LOG_CHANNEL=stderr');
+putenv('SESSION_DRIVER=cookie');
+putenv('CACHE_STORE=array');
 
-// 3. Setup SQLite database in /tmp if not already present
+// 3. Setup SQLite database in /tmp
 $sqliteSource = __DIR__ . '/../database/database.sqlite';
 $sqliteTarget = '/tmp/database.sqlite';
 
 if (!file_exists($sqliteTarget)) {
     if (file_exists($sqliteSource)) {
-        copy($sqliteSource, $sqliteTarget);
+        @copy($sqliteSource, $sqliteTarget);
     } else {
-        touch($sqliteTarget);
+        @touch($sqliteTarget);
     }
 }
 
+$_ENV['DB_CONNECTION'] = 'sqlite';
+$_ENV['DB_DATABASE'] = $sqliteTarget;
 putenv('DB_CONNECTION=sqlite');
 putenv('DB_DATABASE=' . $sqliteTarget);
 
