@@ -38,6 +38,12 @@ $envVars = [
     'DB_CONNECTION' => 'sqlite',
     'DB_DATABASE' => $sqliteTarget,
     'VERCEL' => '1',
+    // Point cache files to /tmp
+    'APP_SERVICES_CACHE' => '/tmp/bootstrap/cache/services.php',
+    'APP_PACKAGES_CACHE' => '/tmp/bootstrap/cache/packages.php',
+    'APP_CONFIG_CACHE' => '/tmp/bootstrap/cache/config.php',
+    'APP_ROUTES_CACHE' => '/tmp/bootstrap/cache/routes-v7.php',
+    'APP_EVENTS_CACHE' => '/tmp/bootstrap/cache/events.php',
 ];
 
 foreach ($envVars as $key => $val) {
@@ -46,12 +52,24 @@ foreach ($envVars as $key => $val) {
     $_SERVER[$key] = $val;
 }
 
-// 4. Handle request with explicit exception display if anything fails
+// 4. Handle request
 try {
     require __DIR__ . '/../vendor/autoload.php';
     /** @var \Illuminate\Foundation\Application $app */
     $app = require __DIR__ . '/../bootstrap/app.php';
     $app->useStoragePath('/tmp/storage');
+
+    // Ensure core providers are always registered in serverless environment
+    if (! $app->providerIsLoaded(\Illuminate\View\ViewServiceProvider::class)) {
+        $app->register(\Illuminate\View\ViewServiceProvider::class);
+    }
+    if (! $app->providerIsLoaded(\Illuminate\Database\DatabaseServiceProvider::class)) {
+        $app->register(\Illuminate\Database\DatabaseServiceProvider::class);
+    }
+    if (! $app->providerIsLoaded(\Illuminate\Session\SessionServiceProvider::class)) {
+        $app->register(\Illuminate\Session\SessionServiceProvider::class);
+    }
+
     $app->handleRequest(\Illuminate\Http\Request::capture());
 } catch (\Throwable $e) {
     http_response_code(500);
