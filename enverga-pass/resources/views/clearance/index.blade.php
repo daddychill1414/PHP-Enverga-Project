@@ -22,7 +22,7 @@
     <div class="bg-white border border-mseuf-border rounded p-6 sm:p-8 shadow-sm mb-8">
         <form action="{{ route('clearance.check') }}" method="POST" class="flex flex-col sm:flex-row gap-3">
             @csrf
-            <input type="text" name="student_id" value="{{ request('student_id') ?? '2022-10482' }}" required placeholder="Student ID Number (e.g. 2022-10482)" class="flex-grow px-4 py-3 border border-gray-300 rounded font-mono text-xs focus:ring-1 focus:ring-mseuf-crimson focus:border-mseuf-crimson">
+            <input type="text" name="student_id" value="{{ request('student_id') ?? 'A20-30518' }}" required placeholder="Student ID Number (e.g. A20-30518)" class="flex-grow px-4 py-3 border border-gray-300 rounded font-mono text-xs focus:ring-1 focus:ring-mseuf-crimson focus:border-mseuf-crimson uppercase">
             
             <button type="submit" class="bg-mseuf-crimson text-white font-bold px-6 py-3 rounded text-xs uppercase tracking-wider hover:bg-mseuf-darkcrimson transition">
                 Search Clearance Status
@@ -30,10 +30,10 @@
         </form>
 
         <div class="mt-4 text-[11px] text-gray-500 flex items-center justify-between border-t border-gray-100 pt-3">
-            <span>Demo Test Student IDs:</span>
+            <span>Sample Student IDs:</span>
             <div class="space-x-2">
-                <code class="bg-gray-100 px-2 py-0.5 rounded font-mono text-emerald-800 font-bold">2022-10482 (Cleared)</code>
-                <code class="bg-gray-100 px-2 py-0.5 rounded font-mono text-rose-800 font-bold">2023-99812 (Pending)</code>
+                <code class="bg-gray-100 px-2 py-0.5 rounded font-mono text-emerald-800 font-bold">A20-30518 (Cleared)</code>
+                <code class="bg-gray-100 px-2 py-0.5 rounded font-mono text-rose-800 font-bold">A22-20831 (Pending Balance)</code>
             </div>
         </div>
     </div>

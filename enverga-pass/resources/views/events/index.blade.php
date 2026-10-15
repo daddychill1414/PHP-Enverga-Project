@@ -6,91 +6,57 @@
 
 <!-- Official MSEUF Animated Slider Carousel (Full Screen Width) -->
 <div class="relative bg-black overflow-hidden border-b border-mseuf-crimson w-full">
-    
-    <div class="swiper heroSwiper h-[500px] sm:h-[560px]">
+    <div class="swiper heroSwiper h-[480px] sm:h-[540px]">
         <div class="swiper-wrapper">
-            
-            <!-- Slide 1 -->
-            <div class="swiper-slide relative bg-mseuf-darkred overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1600&q=80" alt="MSEUF Life" class="w-full h-full object-cover opacity-50 transform scale-105 transition duration-1000">
-                <div class="absolute inset-0 bg-gradient-to-r from-mseuf-darkred via-mseuf-darkred/80 to-transparent"></div>
-                
-                <div class="w-full px-8 h-full flex items-center relative z-10 text-white">
-                    <div class="max-w-3xl space-y-4">
-                        <span class="inline-block px-3.5 py-1 bg-white/10 text-amber-300 font-heading font-bold text-xs uppercase tracking-widest rounded border border-white/20">
-                            ACADEMIC YEAR 2026-2027
-                        </span>
-                        <h1 class="font-heading font-black text-4xl sm:text-6xl text-white tracking-tight leading-tight">
-                            Find your people here
-                        </h1>
-                        <p class="text-base sm:text-xl text-gray-100 font-normal leading-relaxed">
-                            Build friendships that make every university moment unforgettable. LIVE IT ALL.
-                        </p>
-                        <div class="pt-4">
-                            <a href="#events-catalog" class="inline-block px-8 py-3.5 rounded-full border-2 border-white text-white font-heading font-bold text-xs uppercase tracking-widest hover:bg-white hover:text-mseuf-crimson transition shadow-lg transform hover:-translate-y-1">
-                                JOIN OUR COMMUNITY
-                            </a>
+            @forelse($featuredEvents->count() > 0 ? $featuredEvents : $events as $slideEvent)
+                <div class="swiper-slide relative bg-mseuf-darkred overflow-hidden">
+                    <img src="{{ $slideEvent->banner_image ?: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1600&q=80' }}" alt="{{ $slideEvent->title }}" class="w-full h-full object-cover opacity-40 transform scale-105 transition duration-1000">
+                    <div class="absolute inset-0 bg-gradient-to-r from-[#4A0000] via-[#4A0000]/80 to-transparent"></div>
+                    
+                    <div class="w-full px-6 sm:px-12 h-full flex items-center relative z-10 text-white">
+                        <div class="max-w-3xl space-y-3.5">
+                            <span class="inline-block px-3.5 py-1 bg-white/10 text-amber-300 font-heading font-bold text-[11px] uppercase tracking-widest rounded border border-white/20">
+                                {{ $slideEvent->category }} • {{ $slideEvent->event_date->format('M d, Y') }}
+                            </span>
+                            <h1 class="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight leading-tight">
+                                {{ $slideEvent->title }}
+                            </h1>
+                            <p class="text-sm sm:text-base text-gray-100 font-normal leading-relaxed line-clamp-2 max-w-2xl">
+                                {{ $slideEvent->description }}
+                            </p>
+                            <div class="pt-3 flex flex-wrap gap-3">
+                                <a href="{{ route('events.show', $slideEvent->slug) }}" class="inline-block px-7 py-3 rounded-full bg-mseuf-buttonGold text-white font-heading font-bold text-xs uppercase tracking-widest hover:bg-amber-600 transition shadow-lg transform hover:-translate-y-0.5">
+                                    GET PASS • {{ $slideEvent->ticketTypes->min('price') == 0 ? 'FREE' : 'PHP ' . number_format($slideEvent->ticketTypes->min('price'), 2) }}
+                                </a>
+                                <a href="#events-catalog" class="inline-block px-6 py-3 rounded-full border-2 border-white/80 text-white font-heading font-bold text-xs uppercase tracking-widest hover:bg-white hover:text-mseuf-crimson transition shadow-lg">
+                                    VIEW ALL EVENTS
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Slide 2 -->
-            <div class="swiper-slide relative bg-black overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1600&q=80" alt="Tech Summit" class="w-full h-full object-cover opacity-50 transform scale-105 transition duration-1000">
-                <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"></div>
-                
-                <div class="w-full px-8 h-full flex items-center relative z-10 text-white">
-                    <div class="max-w-3xl space-y-4">
-                        <span class="inline-block px-3.5 py-1 bg-mseuf-crimson text-white font-heading font-bold text-xs uppercase tracking-widest rounded">
-                            FEATURED ACADEMIC SUMMIT
-                        </span>
-                        <h1 class="font-heading font-black text-4xl sm:text-6xl text-white tracking-tight leading-tight">
-                            CCMS Tech Innovations 2026
-                        </h1>
-                        <p class="text-base sm:text-xl text-gray-200 font-normal leading-relaxed">
-                            Discover cutting-edge AI breakthroughs and cyber-security workshops hosted by the College of Computing and Multimedia Studies.
-                        </p>
-                        <div class="pt-4">
-                            <a href="#events-catalog" class="inline-block px-8 py-3.5 rounded-full bg-mseuf-crimson text-white font-heading font-bold text-xs uppercase tracking-widest hover:bg-red-700 transition shadow-lg transform hover:-translate-y-1">
-                                EXPLORE TECH SUMMIT
-                            </a>
+            @empty
+                <div class="swiper-slide relative bg-mseuf-darkred overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1600&q=80" alt="MSEUF Campus" class="w-full h-full object-cover opacity-50">
+                    <div class="absolute inset-0 bg-gradient-to-r from-mseuf-darkred via-mseuf-darkred/80 to-transparent"></div>
+                    <div class="w-full px-8 h-full flex items-center relative z-10 text-white">
+                        <div class="max-w-2xl space-y-4">
+                            <span class="inline-block px-3.5 py-1 bg-white/10 text-amber-300 font-heading font-bold text-xs uppercase tracking-widest rounded border border-white/20">
+                                ACADEMIC YEAR 2026-2027
+                            </span>
+                            <h1 class="font-heading font-black text-4xl sm:text-6xl text-white tracking-tight leading-tight">
+                                Enverga University Event Passes
+                            </h1>
+                            <p class="text-base text-gray-100">
+                                Check tuition clearance and claim verified digital event passes with instant QR check-in.
+                            </p>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Slide 3 -->
-            <div class="swiper-slide relative bg-mseuf-darkred overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1600&q=80" alt="University Festival" class="w-full h-full object-cover opacity-50 transform scale-105 transition duration-1000">
-                <div class="absolute inset-0 bg-gradient-to-r from-mseuf-darkred via-black/70 to-transparent"></div>
-                
-                <div class="w-full px-8 h-full flex items-center relative z-10 text-white">
-                    <div class="max-w-3xl space-y-4">
-                        <span class="inline-block px-3.5 py-1 bg-amber-500 text-gray-900 font-heading font-bold text-xs uppercase tracking-widest rounded">
-                            ANNUAL UNIVERSITY FESTIVAL
-                        </span>
-                        <h1 class="font-heading font-black text-4xl sm:text-6xl text-white tracking-tight leading-tight">
-                            Foundation Week Concert
-                        </h1>
-                        <p class="text-base sm:text-xl text-gray-100 font-normal leading-relaxed">
-                            Live musical showcases, cultural exhibitions, and food bazaars at the MSEUF Gymnasium.
-                        </p>
-                        <div class="pt-4">
-                            <a href="#events-catalog" class="inline-block px-8 py-3.5 rounded-full bg-amber-400 text-gray-900 font-heading font-bold text-xs uppercase tracking-widest hover:bg-amber-300 transition shadow-lg transform hover:-translate-y-1">
-                                CLAIM FREE STUDENT PASS
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            @endforelse
         </div>
-
-        <!-- Slider Pagination Bar -->
         <div class="swiper-pagination bottom-6"></div>
     </div>
-
 </div>
 
 <!-- 3 Clean White Action Cards (Full Bleed Width) -->
@@ -104,10 +70,10 @@
                 </div>
                 <div>
                     <div class="font-heading font-black text-sm text-mseuf-crimson uppercase tracking-wide">
-                        APPLY TO JOIN US
+                        BROWSE EVENTS & PASSES
                     </div>
                     <div class="text-xs text-gray-500 font-medium mt-0.5">
-                        Claim event tickets & passes
+                        Claim free passes or reserve event tickets
                     </div>
                 </div>
             </a>
@@ -118,24 +84,24 @@
                 </div>
                 <div>
                     <div class="font-heading font-black text-sm text-mseuf-crimson uppercase tracking-wide">
-                        EXPLORE OUR PROGRAMS
+                        TUITION CLEARANCE CHECK
                     </div>
                     <div class="text-xs text-gray-500 font-medium mt-0.5">
-                        Check student tuition clearance
+                        Verify student financial eligibility
                     </div>
                 </div>
             </a>
 
-            <a href="{{ route('clearance.index') }}" class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex items-center gap-5 hover:border-mseuf-crimson hover:-translate-y-1 transition duration-300 group">
+            <a href="{{ route('admin.login') }}" class="bg-white rounded-xl p-6 shadow-md border border-gray-200 flex items-center gap-5 hover:border-mseuf-crimson hover:-translate-y-1 transition duration-300 group">
                 <div class="w-12 h-12 rounded-full bg-amber-100 text-mseuf-crimson flex items-center justify-center font-heading font-black text-xs flex-shrink-0 group-hover:bg-mseuf-crimson group-hover:text-white transition">
-                    SCAN
+                    GATE
                 </div>
                 <div>
                     <div class="font-heading font-black text-sm text-mseuf-crimson uppercase tracking-wide">
-                        APPLY FOR SCHOLARSHIP
+                        ADMIN GATE SCANNER
                     </div>
                     <div class="text-xs text-gray-500 font-medium mt-0.5">
-                        Verify QR digital pass
+                        Staff QR check-in & event gate operations
                     </div>
                 </div>
             </a>

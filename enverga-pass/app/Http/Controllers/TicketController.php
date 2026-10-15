@@ -64,7 +64,7 @@ class TicketController extends Controller
         $ticketType->decrement('remaining');
 
         // Create Payment record
-        $ticket->payment()->create([
+        $payment = $ticket->payment()->create([
             'reference_number' => 'PAY-' . strtoupper(Str::random(6)),
             'amount' => $ticketType->price,
             'payment_method' => $request->payment_method,
@@ -72,7 +72,17 @@ class TicketController extends Controller
             'paid_at' => now(),
         ]);
 
-        return redirect()->route('tickets.show', $ticket->ticket_number)->with('success', 'Pass Issued Successfully!');
+        // Send Email Verification / Receipt if attendee email is provided
+        try {
+            if ($ticket->attendee_email) {
+                \Illuminate\Support\Facades\Mail::to($ticket->attendee_email)
+                    ->send(new \App\Mail\TicketConfirmedAndPaidMail($ticket));
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning("Could not send pass confirmation email: " . $e->getMessage());
+        }
+
+        return redirect()->route('tickets.show', $ticket->ticket_number)->with('success', 'Pass Issued Successfully! A confirmation copy has been sent to your email.');
     }
 
     public function show($ticketNumber)

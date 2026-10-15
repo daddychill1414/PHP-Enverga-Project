@@ -63,18 +63,18 @@
 
                     <div>
                         <label class="block font-bold text-gray-700 uppercase mb-1">Student ID Number *</label>
-                        <input type="text" name="student_id" value="2022-10482" required placeholder="2022-10482" class="w-full px-3 py-2.5 border border-gray-300 rounded font-mono text-xs focus:ring-1 focus:ring-mseuf-crimson focus:border-mseuf-crimson">
-                        <span class="text-[10px] text-gray-500 mt-1 block">Test IDs: <code class="text-mseuf-crimson font-bold">2022-10482</code> (Cleared) | <code class="text-amber-700 font-bold">2023-99812</code> (Uncleared)</span>
+                        <input type="text" name="student_id" value="{{ old('student_id', 'A20-30518') }}" required placeholder="e.g. A20-30518" class="w-full px-3 py-2.5 border border-gray-300 rounded font-mono text-xs focus:ring-1 focus:ring-mseuf-crimson focus:border-mseuf-crimson uppercase">
+                        <span class="text-[10px] text-gray-500 mt-1 block">Sample IDs: <code class="text-mseuf-crimson font-bold">A20-30518</code> (Cleared) | <code class="text-amber-700 font-bold">A22-20831</code> (Pending Balance)</span>
                     </div>
 
                     <div>
                         <label class="block font-bold text-gray-700 uppercase mb-1">Full Name *</label>
-                        <input type="text" name="attendee_name" value="Juan Dela Cruz" required placeholder="Juan Dela Cruz" class="w-full px-3 py-2.5 border border-gray-300 rounded text-xs focus:ring-1 focus:ring-mseuf-crimson focus:border-mseuf-crimson">
+                        <input type="text" name="attendee_name" value="{{ old('attendee_name', 'Ranie C. Enverga') }}" required placeholder="Full Name" class="w-full px-3 py-2.5 border border-gray-300 rounded text-xs focus:ring-1 focus:ring-mseuf-crimson focus:border-mseuf-crimson">
                     </div>
 
                     <div>
                         <label class="block font-bold text-gray-700 uppercase mb-1">Institutional Email *</label>
-                        <input type="email" name="attendee_email" value="juan.delacruz@mseuf.edu.ph" required placeholder="juan.delacruz@mseuf.edu.ph" class="w-full px-3 py-2.5 border border-gray-300 rounded text-xs focus:ring-1 focus:ring-mseuf-crimson focus:border-mseuf-crimson">
+                        <input type="email" name="attendee_email" value="{{ old('attendee_email', 'ranie.enverga@mseuf.edu.ph') }}" required placeholder="student@mseuf.edu.ph" class="w-full px-3 py-2.5 border border-gray-300 rounded text-xs focus:ring-1 focus:ring-mseuf-crimson focus:border-mseuf-crimson">
                     </div>
 
                     <div>

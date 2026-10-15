@@ -115,15 +115,9 @@
                 <span>|</span>
                 <a href="{{ route('clearance.index') }}" class="hover:underline">Tuition Clearance</a>
                 <span>|</span>
-                <a href="https://mseuf.edu.ph" target="_blank" class="hover:underline">Faculty & Staff</a>
+                <a href="{{ route('admin.login') }}" class="hover:underline font-bold text-amber-300">Staff / Admin Login</a>
                 <span>|</span>
-                <a href="#" class="hover:underline">Downloads</a>
-                <span>|</span>
-                <a href="#" class="hover:underline">Careers</a>
-                <span>|</span>
-                <a href="#" class="hover:underline">Library</a>
-                <span>|</span>
-                <a href="#" class="hover:underline">Sites</a>
+                <a href="https://mseuf.edu.ph" target="_blank" class="hover:underline">MSEUF.edu.ph</a>
                 <span>|</span>
                 <svg class="w-3.5 h-3.5 text-white inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             </div>
@@ -150,23 +144,23 @@
 
             <!-- Center: Official Navigation Items -->
             <nav class="hidden xl:flex items-center text-xs font-bold uppercase tracking-wider text-gray-800">
-                <a href="{{ route('events.index') }}" class="px-3.5 py-2 hover:text-mseuf-crimson transition-colors border-b-2 {{ request()->routeIs('events.index') ? 'border-mseuf-crimson text-mseuf-crimson' : 'border-transparent' }}">
-                    INSTRUCTION & EVENTS
+                <a href="{{ route('events.index') }}" class="px-3.5 py-2 hover:text-mseuf-crimson transition-colors border-b-2 {{ request()->routeIs('events.*') ? 'border-mseuf-crimson text-mseuf-crimson' : 'border-transparent' }}">
+                    INSTRUCTION &amp; EVENTS
                 </a>
                 <span class="text-gray-300 font-light">|</span>
-                <a href="{{ route('clearance.index') }}" class="px-3.5 py-2 hover:text-mseuf-crimson transition-colors border-b-2 {{ request()->routeIs('clearance.index') ? 'border-mseuf-crimson text-mseuf-crimson' : 'border-transparent' }}">
+                <a href="{{ route('clearance.index') }}" class="px-3.5 py-2 hover:text-mseuf-crimson transition-colors border-b-2 {{ request()->routeIs('clearance.*') ? 'border-mseuf-crimson text-mseuf-crimson' : 'border-transparent' }}">
                     TUITION CLEARANCE
                 </a>
                 <span class="text-gray-300 font-light">|</span>
-                <a href="#" class="px-3.5 py-2 hover:text-mseuf-crimson transition-colors border-b-2 border-transparent">
+                <a href="{{ route('pages.sustainability') }}" class="px-3.5 py-2 hover:text-mseuf-crimson transition-colors border-b-2 {{ request()->routeIs('pages.sustainability') ? 'border-mseuf-crimson text-mseuf-crimson' : 'border-transparent' }}">
                     SUSTAINABILITY
                 </a>
                 <span class="text-gray-300 font-light">|</span>
-                <a href="#" class="px-3.5 py-2 hover:text-mseuf-crimson transition-colors border-b-2 border-transparent">
+                <a href="{{ route('pages.internationalization') }}" class="px-3.5 py-2 hover:text-mseuf-crimson transition-colors border-b-2 {{ request()->routeIs('pages.internationalization') ? 'border-mseuf-crimson text-mseuf-crimson' : 'border-transparent' }}">
                     INTERNATIONALIZATION
                 </a>
                 <span class="text-gray-300 font-light">|</span>
-                <a href="#" class="px-3.5 py-2 hover:text-mseuf-crimson transition-colors border-b-2 border-transparent">
+                <a href="{{ route('pages.about') }}" class="px-3.5 py-2 hover:text-mseuf-crimson transition-colors border-b-2 {{ request()->routeIs('pages.about') ? 'border-mseuf-crimson text-mseuf-crimson' : 'border-transparent' }}">
                     ABOUT
                 </a>
             </nav>
