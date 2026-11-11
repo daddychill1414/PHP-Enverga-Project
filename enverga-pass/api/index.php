@@ -66,6 +66,9 @@ try {
     if (! $app->providerIsLoaded(\Illuminate\Database\DatabaseServiceProvider::class)) {
         $app->register(\Illuminate\Database\DatabaseServiceProvider::class);
     }
+    if (! $app->providerIsLoaded(\Illuminate\Mail\MailServiceProvider::class)) {
+        $app->register(\Illuminate\Mail\MailServiceProvider::class);
+    }
     if (! $app->providerIsLoaded(\Illuminate\Session\SessionServiceProvider::class)) {
         $app->register(\Illuminate\Session\SessionServiceProvider::class);
     }
