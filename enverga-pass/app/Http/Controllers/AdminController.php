@@ -40,7 +40,8 @@ class AdminController extends Controller
             ->limit(10)
             ->get();
 
-        $events = Event::withCount('tickets')
+        $events = Event::select('id', 'title', 'event_date', 'status', 'total_capacity')
+            ->withCount('tickets')
             ->orderByDesc('event_date')
             ->limit(5)
             ->get();
@@ -247,7 +248,7 @@ class AdminController extends Controller
         }
 
         $payments = $query->orderByDesc('created_at')->paginate(20)->withQueryString();
-        $events = Event::orderByDesc('event_date')->get();
+        $events = Event::select('id', 'title')->orderByDesc('event_date')->get();
 
         return view('admin.payments', compact('payments', 'events'));
     }
@@ -297,7 +298,7 @@ class AdminController extends Controller
         }
 
         $tickets = $query->orderByDesc('created_at')->paginate(20)->withQueryString();
-        $events = Event::orderByDesc('event_date')->get();
+        $events = Event::select('id', 'title')->orderByDesc('event_date')->get();
 
         return view('admin.tickets', compact('tickets', 'events'));
     }
