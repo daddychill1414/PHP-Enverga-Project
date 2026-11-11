@@ -357,9 +357,8 @@ class AdminController extends Controller
         $bannerUrl = 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80';
         if ($request->hasFile('banner_file') && $request->file('banner_file')->isValid()) {
             $file = $request->file('banner_file');
-            $fileName = time() . '_' . \Illuminate\Support\Str::random(10) . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('storage/events'), $fileName);
-            $bannerUrl = asset('storage/events/' . $fileName);
+            $mime = $file->getClientMimeType() ?: 'image/jpeg';
+            $bannerUrl = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($file->getRealPath()));
         } elseif ($request->filled('banner_image')) {
             $bannerUrl = $request->banner_image;
         }
