@@ -253,7 +253,7 @@
             <button onclick="document.getElementById('createEventModal').style.display='none'" style="background: none; border: none; font-size: 1.4rem; cursor: pointer;">&times;</button>
         </div>
 
-        <form method="POST" action="{{ route('admin.events.store') }}">
+        <form method="POST" action="{{ route('admin.events.store') }}" enctype="multipart/form-data">
             @csrf
 
             <div class="form-group">
@@ -306,8 +306,22 @@
                     <input type="number" name="total_capacity" value="500" min="1" required class="form-input">
                 </div>
                 <div class="form-group">
-                    <label>Banner Image URL (Unsplash/Direct link)</label>
-                    <input type="url" name="banner_image" class="form-input" placeholder="https://images.unsplash.com/...">
+                    <label>Upload Event Picture / Banner</label>
+                    <input type="file" name="banner_file" id="bannerFileInput" accept="image/*" class="form-input" onchange="previewEventImage(this)">
+                    <small style="font-size: 0.7rem; color: var(--text-muted); display: block; margin-top: 0.25rem;">
+                        Recommended: PNG, JPG, or WEBP (Max 5MB)
+                    </small>
+                </div>
+            </div>
+
+            <!-- Optional Image URL fallback & Preview -->
+            <div class="form-group">
+                <label style="font-size: 0.75rem; color: var(--text-muted);">Or paste an Image URL (Optional fallback)</label>
+                <input type="url" name="banner_image" id="bannerImageUrlInput" class="form-input" placeholder="https://images.unsplash.com/..." oninput="previewUrlImage(this.value)">
+                
+                <div id="imagePreviewContainer" style="display: none; margin-top: 0.75rem; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); max-height: 160px; position: relative;">
+                    <img id="imagePreview" src="" alt="Banner Preview" style="width: 100%; height: 160px; object-fit: cover;">
+                    <button type="button" onclick="clearImagePreview()" style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 4px; padding: 0.2rem 0.5rem; font-size: 0.7rem; cursor: pointer;">Remove</button>
                 </div>
             </div>
 
@@ -352,6 +366,38 @@
 </div>
 
 <script>
+    function previewEventImage(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('imagePreview').src = e.target.result;
+                document.getElementById('imagePreviewContainer').style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function previewUrlImage(url) {
+        const preview = document.getElementById('imagePreview');
+        const container = document.getElementById('imagePreviewContainer');
+        const fileInput = document.getElementById('bannerFileInput');
+        if (fileInput.files && fileInput.files.length > 0) return; // Don't override uploaded file preview
+
+        if (url && url.trim().length > 0) {
+            preview.src = url;
+            container.style.display = 'block';
+        } else {
+            container.style.display = 'none';
+        }
+    }
+
+    function clearImagePreview() {
+        document.getElementById('bannerFileInput').value = '';
+        document.getElementById('bannerImageUrlInput').value = '';
+        document.getElementById('imagePreview').src = '';
+        document.getElementById('imagePreviewContainer').style.display = 'none';
+    }
+
     function toggleCustomCategory(value) {
         const customGroup = document.getElementById('customCategoryGroup');
         const customInput = document.getElementById('customCategoryInput');

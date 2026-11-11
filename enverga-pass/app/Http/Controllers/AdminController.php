@@ -331,6 +331,7 @@ class AdminController extends Controller
             'custom_category' => 'nullable|required_if:category,Others|string|max:255',
             'event_date' => 'required|date',
             'banner_image' => 'nullable|url',
+            'banner_file' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
             'total_capacity' => 'required|integer|min:1',
             'requires_tuition_clearance' => 'nullable|boolean',
             'is_featured' => 'nullable|boolean',
@@ -353,6 +354,16 @@ class AdminController extends Controller
             ? trim($request->custom_category)
             : $request->category;
 
+        $bannerUrl = 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80';
+        if ($request->hasFile('banner_file') && $request->file('banner_file')->isValid()) {
+            $file = $request->file('banner_file');
+            $fileName = time() . '_' . \Illuminate\Support\Str::random(10) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('storage/events'), $fileName);
+            $bannerUrl = asset('storage/events/' . $fileName);
+        } elseif ($request->filled('banner_image')) {
+            $bannerUrl = $request->banner_image;
+        }
+
         $event = Event::create([
             'title' => $request->title,
             'slug' => $slug,
@@ -361,7 +372,7 @@ class AdminController extends Controller
             'organizer' => $request->organizer,
             'category' => $category,
             'event_date' => $request->event_date,
-            'banner_image' => $request->banner_image ?: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80',
+            'banner_image' => $bannerUrl,
             'total_capacity' => $request->total_capacity,
             'requires_tuition_clearance' => $request->boolean('requires_tuition_clearance'),
             'is_featured' => $request->boolean('is_featured'),
