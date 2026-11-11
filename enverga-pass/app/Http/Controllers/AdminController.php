@@ -327,7 +327,8 @@ class AdminController extends Controller
             'description' => 'required|string',
             'location' => 'required|string|max:255',
             'organizer' => 'required|string|max:255',
-            'category' => 'required|string',
+            'category' => 'required|string|max:255',
+            'custom_category' => 'nullable|required_if:category,Others|string|max:255',
             'event_date' => 'required|date',
             'banner_image' => 'nullable|url',
             'total_capacity' => 'required|integer|min:1',
@@ -348,13 +349,17 @@ class AdminController extends Controller
             $slug = $originalSlug . '-' . $counter++;
         }
 
+        $category = ($request->category === 'Others' && $request->filled('custom_category'))
+            ? trim($request->custom_category)
+            : $request->category;
+
         $event = Event::create([
             'title' => $request->title,
             'slug' => $slug,
             'description' => $request->description,
             'location' => $request->location,
             'organizer' => $request->organizer,
-            'category' => $request->category,
+            'category' => $category,
             'event_date' => $request->event_date,
             'banner_image' => $request->banner_image ?: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80',
             'total_capacity' => $request->total_capacity,

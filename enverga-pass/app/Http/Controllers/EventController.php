@@ -26,8 +26,9 @@ class EventController extends Controller
 
         $events = $query->orderBy('event_date', 'asc')->get();
         $featuredEvents = Event::where('is_featured', true)->get();
+        $availableCategories = Event::where('status', 'upcoming')->pluck('category')->unique()->filter()->values();
 
-        return view('events.index', compact('events', 'featuredEvents', 'category', 'search'));
+        return view('events.index', compact('events', 'featuredEvents', 'category', 'search', 'availableCategories'));
     }
 
     public function show($slug)

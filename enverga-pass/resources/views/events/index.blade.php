@@ -128,15 +128,11 @@
             <a href="{{ route('events.index') }}" class="px-4 py-2 rounded-full border {{ !$category ? 'bg-mseuf-crimson text-white border-mseuf-crimson' : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400' }}">
                 ALL EVENTS
             </a>
-            <a href="{{ route('events.index', ['category' => 'University Festival']) }}" class="px-4 py-2 rounded-full border {{ $category == 'University Festival' ? 'bg-mseuf-crimson text-white border-mseuf-crimson' : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400' }}">
-                FESTIVALS
-            </a>
-            <a href="{{ route('events.index', ['category' => 'Academic & Tech']) }}" class="px-4 py-2 rounded-full border {{ $category == 'Academic & Tech' ? 'bg-mseuf-crimson text-white border-mseuf-crimson' : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400' }}">
-                ACADEMIC
-            </a>
-            <a href="{{ route('events.index', ['category' => 'Sports & Athletics']) }}" class="px-4 py-2 rounded-full border {{ $category == 'Sports & Athletics' ? 'bg-mseuf-crimson text-white border-mseuf-crimson' : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400' }}">
-                SPORTS
-            </a>
+            @foreach($availableCategories as $cat)
+                <a href="{{ route('events.index', ['category' => $cat]) }}" class="px-4 py-2 rounded-full border {{ $category == $cat ? 'bg-mseuf-crimson text-white border-mseuf-crimson' : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400' }}">
+                    {{ $cat }}
+                </a>
+            @endforeach
         </div>
     </div>
 

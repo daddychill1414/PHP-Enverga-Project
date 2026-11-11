@@ -273,14 +273,20 @@
                 </div>
                 <div class="form-group">
                     <label>Category *</label>
-                    <select name="category" required class="form-select">
+                    <select name="category" id="eventCategorySelect" required class="form-select" onchange="toggleCustomCategory(this.value)">
                         <option value="University Festival">University Festival</option>
                         <option value="Academic & Tech">Academic &amp; Tech</option>
                         <option value="Sports & Athletics">Sports &amp; Athletics</option>
                         <option value="Concert & Cultural">Concert &amp; Cultural</option>
                         <option value="Student Orientation">Student Orientation</option>
+                        <option value="Others">Others (Custom Category)</option>
                     </select>
                 </div>
+            </div>
+
+            <div class="form-group" id="customCategoryGroup" style="display: none;">
+                <label>Custom Category Name *</label>
+                <input type="text" name="custom_category" id="customCategoryInput" class="form-input" placeholder="e.g. Leadership Workshop, Seminar, Alumni Meet">
             </div>
 
             <div class="form-row">
@@ -346,6 +352,20 @@
 </div>
 
 <script>
+    function toggleCustomCategory(value) {
+        const customGroup = document.getElementById('customCategoryGroup');
+        const customInput = document.getElementById('customCategoryInput');
+        if (value === 'Others') {
+            customGroup.style.display = 'block';
+            customInput.required = true;
+            customInput.focus();
+        } else {
+            customGroup.style.display = 'none';
+            customInput.required = false;
+            customInput.value = '';
+        }
+    }
+
     function addTierRow() {
         const container = document.getElementById('tiersContainer');
         const div = document.createElement('div');
