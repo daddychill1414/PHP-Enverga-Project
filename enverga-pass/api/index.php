@@ -45,14 +45,14 @@ $envVars = [
     'APP_ROUTES_CACHE' => '/tmp/bootstrap/cache/routes-v7.php',
     'APP_EVENTS_CACHE' => '/tmp/bootstrap/cache/events.php',
     // Fallback mail configuration for Gmail SMTP on Vercel
-    'MAIL_MAILER' => env('MAIL_MAILER') ?: 'smtp',
-    'MAIL_HOST' => env('MAIL_HOST') ?: 'smtp.gmail.com',
-    'MAIL_PORT' => env('MAIL_PORT') ?: '587',
-    'MAIL_USERNAME' => env('MAIL_USERNAME') ?: 'ranielgoapps@gmail.com',
-    'MAIL_PASSWORD' => env('MAIL_PASSWORD') ?: 'shzjellaslsupusb',
-    'MAIL_ENCRYPTION' => env('MAIL_ENCRYPTION') ?: 'tls',
-    'MAIL_FROM_ADDRESS' => env('MAIL_FROM_ADDRESS') ?: 'ranielgoapps@gmail.com',
-    'MAIL_FROM_NAME' => env('MAIL_FROM_NAME') ?: 'Manuel S. Enverga University Foundation',
+    'MAIL_MAILER' => getenv('MAIL_MAILER') ?: 'smtp',
+    'MAIL_HOST' => getenv('MAIL_HOST') ?: 'smtp.gmail.com',
+    'MAIL_PORT' => getenv('MAIL_PORT') ?: '587',
+    'MAIL_USERNAME' => getenv('MAIL_USERNAME') ?: 'ranielgoapps@gmail.com',
+    'MAIL_PASSWORD' => getenv('MAIL_PASSWORD') ?: 'shzjellaslsupusb',
+    'MAIL_ENCRYPTION' => getenv('MAIL_ENCRYPTION') ?: 'tls',
+    'MAIL_FROM_ADDRESS' => getenv('MAIL_FROM_ADDRESS') ?: 'ranielgoapps@gmail.com',
+    'MAIL_FROM_NAME' => getenv('MAIL_FROM_NAME') ?: 'Manuel S. Enverga University Foundation',
 ];
 
 foreach ($envVars as $key => $val) {
