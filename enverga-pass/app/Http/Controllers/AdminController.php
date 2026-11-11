@@ -15,18 +15,26 @@ class AdminController extends Controller
      */
     public function dashboard()
     {
-        $totalTickets = Ticket::count();
-        $checkedInToday = Ticket::where('status', 'checked_in')
-            ->whereDate('checked_in_at', Carbon::today())
-            ->count();
+        $statusCounts = Ticket::selectRaw("
+            count(*) as total,
+            count(case when status = 'checked_in' and date(checked_in_at) = CURRENT_DATE then 1 end) as checked_in_today,
+            count(case when status = 'confirmed' then 1 end) as confirmed_count,
+            count(case when status = 'checked_in' then 1 end) as checked_in_count,
+            count(case when status = 'cancelled' then 1 end) as cancelled_count
+        ")->first();
+
+        $totalTickets = $statusCounts->total ?? 0;
+        $checkedInToday = $statusCounts->checked_in_today ?? 0;
         $totalRevenue = Payment::where('status', 'completed')->sum('amount');
         $activeEvents = Event::whereIn('status', ['upcoming', 'ongoing'])->count();
 
-        $statusBreakdown = Ticket::selectRaw('status, count(*) as count')
-            ->groupBy('status')
-            ->pluck('count', 'status');
+        $statusBreakdown = collect([
+            'confirmed' => $statusCounts->confirmed_count ?? 0,
+            'checked_in' => $statusCounts->checked_in_count ?? 0,
+            'cancelled' => $statusCounts->cancelled_count ?? 0,
+        ]);
 
-        $recentCheckins = Ticket::with(['event', 'ticketType'])
+        $recentCheckins = Ticket::with(['event:id,title', 'ticketType:id,name'])
             ->where('status', 'checked_in')
             ->orderByDesc('checked_in_at')
             ->limit(10)
